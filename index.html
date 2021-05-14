@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/estilos.css">
+    <script type=text/javascript src="./js/archivos.js"></script>
+</head>
+<body>
+    
+    <p class="titulos">LISTA DE PERSONAS</p>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nombre</th>
+                    <th>Cuatrimestre</th>
+                    <th>FechaFinal</th>
+                    <th>Turno</th>
+                </tr>            
+            </thead>
+            <tbody id="tcuerpo">
+            </tbody>
+    <div id="cargar" hidden> <!--si pongo hidden es div oculto no aparece-->
+        <button class="chau" id="close">X</button><br><br>  
+        <label for="txtNombre">Nombre</label><br><br>
+        <input type="text" name="" id="txtNombre"><br><br>
+        <label for="txtCuatrimestre">Cuatrimestre</label><br><br>
+        <select name="select">
+            <option value="c1">1</option>
+            <option value="c2" selected>2</option>
+            <option value="c3">3</option>
+            <option value="c3">4</option>
+          </select>
+        <label for="dteFecha">Fecha</label><br><br>
+        <input type="date" name="" id="dteFecha"><br><br>
+        <label>Sexo</label><br><br>
+        <input type="radio" name="turno" id="sxf">Mañana<br>
+        <input type="radio" name="turno" id="sxm">Noche<br><br>
+        <input type="button" value="Eliminar" class="chau" id="no"><input type="button" class="hola" value="Modificar" id="yes">
+    </div>
+    
+    <div class="loader" hidden></div>
+    <div class="loader2" hidden></div>
+</table>
+
+</body>
+</html>
