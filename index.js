@@ -215,6 +215,7 @@ app.post("/editar",function(req,res){
     
 });
 app.post("/eliminar",function(req,res){
+
     setTimeout(function(){
         
        console.log(req.body);

@@ -1,12 +1,15 @@
 var peticionHttp= new XMLHttpRequest();
+var listaPersonas;
 var id1;
+var fila;
 window.addEventListener('load',function()
 {
     TraerPersonas();
     var x=$("close");
     x.addEventListener("click",close);
-    var change=$("yes");
-    change.addEventListener("click",enviarPersonas);
+
+
+
 });
 
 // var peticionHttp= new XMLHttpRequest();
@@ -25,15 +28,19 @@ function $(id)
 
 function TraerPersonas()
 {
+
     peticionHttp.onreadystatechange=function(){
-        
+        $("loader").hidden=false;
+        $("loader2").hidden=false;
         if(peticionHttp.readyState==4 && peticionHttp.status==200)
         { 
-            var listaPersonas= JSON.parse(peticionHttp.responseText);
+            $("loader").hidden=true;
+            $("loader2").hidden=true;
+            listaPersonas= JSON.parse(peticionHttp.responseText);
             var bool=true;
             for(var i=0;i<listaPersonas.length;i++)
             {
-                id1=listaPersonas[i].id;
+
                 //console.log(listaPersonas[i].nombre,listaPersonas[i].apellido);
                 /*       DOM        */
                 var cuerpo=$("tcuerpo");
@@ -86,40 +93,122 @@ function TraerPersonas()
 
 function modificar(event)
 {
+    fila=event.target.parentNode;
+    id1 = fila.childNodes[0].childNodes[0].nodeValue;
     cuadro=$("cargar")
     cuadro.hidden=false;
     
     var txtNom;
-    var txtApe;
+    var txtCu;
     var dateFecha;
-    var radioSexo;
+    var radioTur;
     var elemento=event.target;
     
-    txtNom=(elemento.parentNode).cells[0].innerHTML;
+    txtNom=(elemento.parentNode).cells[1].innerHTML;
     $("txtNombre").value=txtNom;
-    txtApe=(elemento.parentNode).cells[1].innerHTML;
-    $("txtApellido").value=txtApe;
-    dateFecha=(elemento.parentNode).cells[2].innerHTML;
-    $("dteFecha").value=dateFecha;
- 
-    radioSexo=txtNom=(elemento.parentNode).cells[3].innerHTML;
-    if(radioSexo=="Female")
+    
+
+    dateFecha=(elemento.parentNode).cells[3].innerHTML;
+    var array = dateFecha.split("/");
+    $("dteFecha").value = array[2] + "-" + array[1] + "-" + array[0];
+    
+    txtCu=(elemento.parentNode).cells[2].innerHTML;
+    if(txtCu=="1")
     {
-        $("sxf").checked=true;
+        $("txtCuatrimestre").options[4].selected=true;
+        $("txtCuatrimestre").options[4].disabled=true;
+    }
+    if (txtCu=="2") {
+        $("txtCuatrimestre").options[3].selected=true;
+        $("txtCuatrimestre").options[3].disabled=true;
+    } 
+    if(txtCu=="3")
+    {
+        $("txtCuatrimestre").options[2].selected=true;
+        $("txtCuatrimestre").options[2].disabled=true;
+    }
+    else{
+        $("txtCuatrimestre").options[1].selected=true;
+        $("txtCuatrimestre").options[1].disabled=true;
+    }
+    $("txtCuatrimestre").disabled=true;
+    radioTur=txtNom=(elemento.parentNode).cells[4].innerHTML;
+    if(radioTur=="Noche")
+    {
+        
+        $("tn").checked=true;
     }
     else
     {
-        $("sxm").checked=true;
+        $("tm").checked=true;
     }
+
+    var change=$("yes");
+    change.addEventListener("click",enviarPersonas);
+
+    var y=$("no");
+    y.addEventListener("click",deletePerso);
 }
 
-function enviarPersonas()
+
+
+
+function deletePerso(event)
 {
+    var fila=event.target.parentNode.parentNode;
     var nombre=$("txtNombre").value;
-    var apellido=$("txtApellido").value;
+
+    var cuatri=$("txtCuatrimestre").value;
+
     var fecha=$("dteFecha").value;
-    var sexo;
+    var turno;
+
+        if($("tm").checked==true)
+        {
+            turno="Mañana";
+            bool=true;
+
+        }
+        else
+        {
+            turno="Noche";
+            bool=true;
+        }
+    
+
+        var stringPersona;
+
+        peticionHttp.onreadystatechange=function(){
+            var personaJson={"id":id1,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
+            // alert(nombre + " " + apellido + " " + fecha + " " + sexo);
+            stringPersona=JSON.stringify(personaJson); 
+            if(peticion.status == 200 && peticion.readyState == 4)
+            {
+                //elimina de pagina pero no tira ok
+            }
+
+            
+        }
+            peticionHttp.open("POST","http://localhost:3000/eliminar",true);
+            peticionHttp.setRequestHeader("Content-type","application/json");
+            peticionHttp.send(stringPersona);
+            
+
+    
+}
+
+
+function enviarPersonas(event)
+{
+    var fila=event.target.parentNode.parentNode;
+    var nombre=$("txtNombre").value;
+
+    var cuatri=$("txtCuatrimestre").value;
+
+    var fecha=$("dteFecha").value;
+    var turno;
     var bool=false;
+
 
     const hoy = Date.now();
     const today = new Date(hoy);
@@ -130,17 +219,17 @@ function enviarPersonas()
     // alert(dateIso.toISOString());
     // alert(today.toISOString());
 
-    if(nombre.length>3 && apellido.length>3 && dateIso.getTime()<=today.getTime())
+    if(nombre.length>=6 && dateIso.getTime()<=today.getTime())
     {
-        if($("sxf").checked==true)
+        if($("tm").checked==true)
         {
-            sexo="Female";
+            turno="Mañana";
             bool=true;
 
         }
         else
         {
-            sexo="Male";
+            turno="Noche";
             bool=true;
         }
     }
@@ -148,15 +237,32 @@ function enviarPersonas()
     if(bool==true)
     {
         var stringPersona;
+
         peticionHttp.onreadystatechange=function(){
-            var personaJson={"id":id1,"nombre":nombre,"apellido":apellido,"fecha":fecha,"sexo":sexo};
+            var personaJson={"id":id1,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
             // alert(nombre + " " + apellido + " " + fecha + " " + sexo);
             stringPersona=JSON.stringify(personaJson); 
+            if(peticion.status == 200 && peticion.readyState == 4)
+            {
+
+                fila.childNodes[0].childNodes[0].nodeValue=id1;
+                fila.childNodes[1].childNodes[0].nodeValue=nombre;
+                fila.childNodes[2].childNodes[0].nodeValue=cuatrimestre;
+                var array = dateFecha.split("-");
+                fecha = array[2] + "/" + array[1] + "/" + array[0]; //guarda mal la fecha lo demas ok
+                alert("hola");
+                fila.childNodes[3].childNodes[0].nodeValue=fecha;
+                fila.childNodes[4].childNodes[0].nodeValue=turno; 
+
+            }
+
             
         }
             peticionHttp.open("POST","http://localhost:3000/editar",true);
             peticionHttp.setRequestHeader("Content-type","application/json");
-            peticionHttp.send(stringPersona); 
+            peticionHttp.send(stringPersona);
+            
+
     }
     
 
