@@ -200,7 +200,7 @@ function deletePerso(event)
 
 function enviarPersonas(event)
 {
-    var fila=event.target.parentNode.parentNode;
+    var fila=event.target.parentNode.parentNode.parentNode;
     var nombre=$("txtNombre").value;
 
     var cuatri=$("txtCuatrimestre").value;
@@ -239,6 +239,8 @@ function enviarPersonas(event)
         var stringPersona;
 
         peticionHttp.onreadystatechange=function(){
+            var array = fecha.split("-");
+            fecha = array[2] + "/" + array[1] + "/" + array[0];
             var personaJson={"id":id1,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
             // alert(nombre + " " + apellido + " " + fecha + " " + sexo);
             stringPersona=JSON.stringify(personaJson); 
@@ -248,9 +250,7 @@ function enviarPersonas(event)
                 fila.childNodes[0].childNodes[0].nodeValue=id1;
                 fila.childNodes[1].childNodes[0].nodeValue=nombre;
                 fila.childNodes[2].childNodes[0].nodeValue=cuatrimestre;
-                var array = dateFecha.split("-");
-                fecha = array[2] + "/" + array[1] + "/" + array[0]; //guarda mal la fecha lo demas ok
-                alert("hola");
+                 //guarda mal la fecha lo demas ok
                 fila.childNodes[3].childNodes[0].nodeValue=fecha;
                 fila.childNodes[4].childNodes[0].nodeValue=turno; 
 
