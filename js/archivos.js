@@ -30,12 +30,10 @@ function TraerPersonas()
 {
 
     peticionHttp.onreadystatechange=function(){
-        $("loader").hidden=false;
-        $("loader2").hidden=false;
+     
         if(peticionHttp.readyState==4 && peticionHttp.status==200)
         { 
-            $("loader").hidden=true;
-            $("loader2").hidden=true;
+            $("load").hidden=true;
             listaPersonas= JSON.parse(peticionHttp.responseText);
             var bool=true;
             for(var i=0;i<listaPersonas.length;i++)
@@ -94,45 +92,42 @@ function TraerPersonas()
 function modificar(event)
 {
     fila=event.target.parentNode;
-    id1 = fila.childNodes[0].childNodes[0].nodeValue;
-    cuadro=$("cargar")
+    id1 = fila.childNodes[0].childNodes[0];
+    cuadro=$("cargar");
     cuadro.hidden=false;
     
     var txtNom;
     var txtCu;
     var dateFecha;
     var radioTur;
-    var elemento=event.target;
     
-    txtNom=(elemento.parentNode).cells[1].innerHTML;
+    txtNom=fila.cells[1].innerHTML;
     $("txtNombre").value=txtNom;
+ 
     
 
-    dateFecha=(elemento.parentNode).cells[3].innerHTML;
+    dateFecha=fila.cells[3].innerHTML;
     var array = dateFecha.split("/");
     $("dteFecha").value = array[2] + "-" + array[1] + "-" + array[0];
     
-    txtCu=(elemento.parentNode).cells[2].innerHTML;
-    if(txtCu=="1")
+    txtCu=fila.cells[2].innerHTML;
+    if(txtCu==1)
     {
-        $("txtCuatrimestre").options[4].selected=true;
-        $("txtCuatrimestre").options[4].disabled=true;
+        $("txtCuatrimestre").options[0].selected=true;
     }
-    if (txtCu=="2") {
-        $("txtCuatrimestre").options[3].selected=true;
-        $("txtCuatrimestre").options[3].disabled=true;
+    if (txtCu==2) {
+        $("txtCuatrimestre").options[1].selected=true;
     } 
-    if(txtCu=="3")
+    if(txtCu==3)
     {
         $("txtCuatrimestre").options[2].selected=true;
-        $("txtCuatrimestre").options[2].disabled=true;
     }
-    else{
-        $("txtCuatrimestre").options[1].selected=true;
-        $("txtCuatrimestre").options[1].disabled=true;
+    if(txtCu==4)
+    {
+        $("txtCuatrimestre").options[3].selected=true;
     }
     $("txtCuatrimestre").disabled=true;
-    radioTur=txtNom=(elemento.parentNode).cells[4].innerHTML;
+    radioTur=txtNom=fila.cells[4].innerHTML;
     if(radioTur=="Noche")
     {
         
@@ -143,127 +138,106 @@ function modificar(event)
         $("tm").checked=true;
     }
 
-    var change=$("yes");
-    change.addEventListener("click",enviarPersonas);
-
-    var y=$("no");
-    y.addEventListener("click",deletePerso);
-}
+    var mod=$("yes");
+    var del=$("no");
 
 
 
 
-function deletePerso(event)
-{
-    var fila=event.target.parentNode.parentNode;
-    var nombre=$("txtNombre").value;
 
-    var cuatri=$("txtCuatrimestre").value;
 
-    var fecha=$("dteFecha").value;
-    var turno;
 
-        if($("tm").checked==true)
-        {
-            turno="Mañana";
-            bool=true;
+    mod.onclick=function()
+    {
+        var nombre=$("txtNombre").value;
 
-        }
-        else
-        {
-            turno="Noche";
-            bool=true;
-        }
+        var cuatri=$("txtCuatrimestre").value;
+        var id = fila.childNodes[0].innerHTML;
+        var fecha=$("dteFecha").value;
+        var turno;
+        var bool=false;
     
+    
+        const hoy = Date.now();
+        const today = new Date(hoy);
+    
+        var fechaType=Date.parse(fecha);
+        const dateIso = new Date(fechaType);
 
-        var stringPersona;
-
-        peticionHttp.onreadystatechange=function(){
-            var personaJson={"id":id1,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
-            // alert(nombre + " " + apellido + " " + fecha + " " + sexo);
-            stringPersona=JSON.stringify(personaJson); 
-            if(peticion.status == 200 && peticion.readyState == 4)
+        if(nombre.length>=6 && dateIso.getTime()>=today.getTime())
+        {
+            if($("tm").checked==true)
             {
-                //elimina de pagina pero no tira ok
-            }
-
-            
-        }
-            peticionHttp.open("POST","http://localhost:3000/eliminar",true);
-            peticionHttp.setRequestHeader("Content-type","application/json");
-            peticionHttp.send(stringPersona);
-            
-
+                turno="Mañana";
+                bool=true;
     
-}
-
-
-function enviarPersonas(event)
-{
-    var fila=event.target.parentNode.parentNode.parentNode;
-    var nombre=$("txtNombre").value;
-
-    var cuatri=$("txtCuatrimestre").value;
-
-    var fecha=$("dteFecha").value;
-    var turno;
-    var bool=false;
-
-
-    const hoy = Date.now();
-    const today = new Date(hoy);
-
-    var fechaType=Date.parse(fecha);
-    const dateIso = new Date(fechaType);
-
-    // alert(dateIso.toISOString());
-    // alert(today.toISOString());
-
-    if(nombre.length>=6 && dateIso.getTime()<=today.getTime())
-    {
-        if($("tm").checked==true)
-        {
-            turno="Mañana";
-            bool=true;
-
+            }
+            else
+            {
+                turno="Noche";
+                bool=true;
+            }
         }
-        else
+    
+        if(bool==true)
         {
-            turno="Noche";
-            bool=true;
-        }
-    }
-
-    if(bool==true)
-    {
-        var stringPersona;
-
-        peticionHttp.onreadystatechange=function(){
+           
+            var stringPersona;
             var array = fecha.split("-");
             fecha = array[2] + "/" + array[1] + "/" + array[0];
-            var personaJson={"id":id1,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
-            // alert(nombre + " " + apellido + " " + fecha + " " + sexo);
-            stringPersona=JSON.stringify(personaJson); 
-            if(peticion.status == 200 && peticion.readyState == 4)
+
+            peticionHttp.onreadystatechange=function()
             {
+                var personaJson={"id":id,"nombre":nombre,"cuatrimestre":cuatri,"fechaFinal":fecha,"turno":turno};
 
-                fila.childNodes[0].childNodes[0].nodeValue=id1;
-                fila.childNodes[1].childNodes[0].nodeValue=nombre;
-                fila.childNodes[2].childNodes[0].nodeValue=cuatrimestre;
-                 //guarda mal la fecha lo demas ok
-                fila.childNodes[3].childNodes[0].nodeValue=fecha;
-                fila.childNodes[4].childNodes[0].nodeValue=turno; 
-
-            }
-
-            
-        }
-            peticionHttp.open("POST","http://localhost:3000/editar",true);
-            peticionHttp.setRequestHeader("Content-type","application/json");
-            peticionHttp.send(stringPersona);
-            
-
-    }
+                stringPersona=JSON.stringify(personaJson); 
+                if(peticionHttp.status == 200 && peticionHttp.readyState == 4)
+                {
+                    
+                    $("load").style.display = "none";
+                    close();
+                    fila.childNodes[1].innerHTML=nombre;
+                    fila.childNodes[2].innerHTML=cuatri;
+                    fila.childNodes[3].innerHTML=fecha;
+                    fila.childNodes[4].innerHTML=turno;
+                    fila.childNodes[0].innerHTML=id; 
+                }
     
+                
+            }
+                $("load").style.display = "flex";
+                peticionHttp.open("POST","http://localhost:3000/editar",true);
+                peticionHttp.setRequestHeader("Content-type","application/json");
+                peticionHttp.send(stringPersona);
+        }       
+    }
 
+
+
+
+    del.onclick=function()
+    {
+        var delId=fila.childNodes[0].innerHTML;
+        var personaJson={"id":delId};
+        stringPersona=JSON.stringify(personaJson); 
+        peticionHttp.onreadystatechange=function()
+        {
+            if(peticionHttp.status == 200 && peticionHttp.readyState == 4)
+            {
+                $("load").style.display = "none";
+                close();
+                fila.removeChild(fila.childNodes[0]);
+                fila.removeChild(fila.childNodes[0]);
+                fila.removeChild(fila.childNodes[0]);
+                fila.removeChild(fila.childNodes[0]);
+                fila.removeChild(fila.childNodes[0]);
+            }           
+
+        }
+        $("load").style.display = "flex";
+        peticionHttp.open("POST","http://localhost:3000/eliminar",true);
+        peticionHttp.setRequestHeader("Content-type","application/json");
+        peticionHttp.send(stringPersona);
+    }
 }
+

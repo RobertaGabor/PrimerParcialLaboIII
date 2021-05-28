@@ -11,40 +11,42 @@
 <body>
     
     <p class="titulos">LISTA DE PERSONAS</p>
-        <table id="myTable">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Nombre</th>
-                    <th>Cuatrimestre</th>
-                    <th>FechaFinal</th>
-                    <th>Turno</th>
-                </tr>            
-            </thead>
-            <tbody id="tcuerpo">
-            </tbody>
-    <div id="cargar" hidden> <!--si pongo hidden es div oculto no aparece-->
-        <button class="chau" id="close">X</button><br><br>  
-        <label for="txtNombre">Nombre</label><br><br>
-        <input type="text" name="" id="txtNombre"><br><br>
-        <label for="txtCuatrimestre">Cuatrimestre</label><br><br>
-        <select name="select" id="txtCuatrimestre">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="3">4</option>
-          </select><br><br>
-        <label for="dteFecha">Fecha</label><br><br>
-        <input type="date" name="" id="dteFecha"><br><br>
-        <label>Turno</label><br><br>
-        <input type="radio" name="turno" id="tm">Mañana<br>
-        <input type="radio" name="turno" id="tn">Noche<br><br>
-        <input type="button" value="Eliminar" class="chau" id="no"><input type="button" class="hola" value="Modificar" id="yes">
+    <div class="contain">
+        <div class="grilla" id="cargar" hidden>
+            <button class="chau" id="close">X</button><br><br>  
+            <label for="txtNombre">Nombre</label><br><br>
+            <input type="text" name="" id="txtNombre"><br><br>
+            <label for="txtCuatrimestre">Cuatrimestre</label><br><br>
+            <select name="select" id="txtCuatrimestre">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select><br><br>
+            <label for="dteFecha">Fecha</label><br><br>
+            <input type="date" name="" id="dteFecha"><br><br>
+            <label>Turno</label><br><br>
+            <input type="radio" name="turno" id="tm">Mañana<br>
+            <input type="radio" name="turno" id="tn">Noche<br><br>
+            <input type="button" value="Eliminar" class="chau" id="no"><input type="button" class="hola" value="Modificar" id="yes">
+        </div>
     </div>
-    
-    <div id="loader" hidden></div>
-    <div id="loader2" hidden></div>
-</table>
-
+    <div class="loader" id="load">
+        <!--imagen-->
+        <img src="img/1458025209_Nyan cat.gif">
+    </div>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Nombre</th>
+                <th>Cuatrimestre</th>
+                <th>FechaFinal</th>
+                <th>Turno</th>
+            </tr>            
+        </thead>
+        <tbody id="tcuerpo">
+        </tbody>
+    </table>
 </body>
 </html>

@@ -6,7 +6,15 @@
 #myTable tr td:nth-child(1), #myTable th:nth-child(1) {
     display: none;
 }
-
+.loader
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
 table
 {
     
@@ -37,17 +45,20 @@ td
    
     background-color: plum;
 }
-#cargar
+.contain{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    
+}
+.grilla
 {
     background-color: lightskyblue;
-    margin-left: 25%;
-    margin-right: 25%;
-    position: fixed;
-    box-sizing: content-box;
-    width: 600px;
-    height: 420px;
-    margin-top: 10px;
-    padding: 10px;
+    top: 135px;
+    position: absolute;
+    width: 30%;
+    padding: 20px;
+    border-radius: 5px;
     
     
 }
@@ -87,32 +98,3 @@ input[type=text]
     color: white;
 
 }
-.loader {
-    border: 16px solid #f3f3f3; 
-    border-top: 16px solid #3498db; 
-    width: 70rem;
-    height: 70rem;
-    padding: 10%;
-    animation: spin 2s linear infinite;
-    position: fixed;
-    box-sizing: border-box;
-    
-  }
-
-  .loader2 {
-    border: 16px solid #f3f3f3; 
-    border-top: 16px solid #3498db; 
-    box-sizing: border-box;
-    width: 70rem;
-    height: 70rem;
-    margin-left: 57%;
-    padding: 10%;
-    animation: spin 2s linear infinite;
-    position: fixed;
-    
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
